@@ -39,7 +39,6 @@ export default function JsonPlaceholderDemo() {
     }
   };
 
-  // Función para cargar los datos al hacer clic en el botón
 
   const handleLoadData = () => {
     fetchPosts();

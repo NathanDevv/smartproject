@@ -5,7 +5,6 @@ import Link from "next/link";
 
 export default function LoginPage() {
   useEffect(() => {
-    // Mostrar/ocultar contraseña (si tuvieras un botón con ID toggle-password)
     const togglePasswordButton = document.getElementById("toggle-password");
     if (togglePasswordButton) {
       togglePasswordButton.addEventListener("click", () => {
@@ -14,7 +13,6 @@ export default function LoginPage() {
       });
     }
 
-    // Validar formulario al enviar
     const form = document.getElementById("login-form") as HTMLFormElement;
     const passwordInput = document.getElementById("password") as HTMLInputElement;
 
@@ -41,7 +39,6 @@ export default function LoginPage() {
         }
       }
 
-      // Validación de contraseña
       const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
       if (passwordError) {
         if (!passwordPattern.test(password)) {
@@ -53,7 +50,7 @@ export default function LoginPage() {
       }
 
       if (valid) {
-        form.submit(); // Enviar si es válido
+        form.submit(); 
       }
     }
 
