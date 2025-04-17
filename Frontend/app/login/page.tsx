@@ -1,70 +1,54 @@
 "use client";
 
-import { useEffect } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 
 export default function LoginPage() {
-  useEffect(() => {
-    const togglePasswordButton = document.getElementById("toggle-password");
-    if (togglePasswordButton) {
-      togglePasswordButton.addEventListener("click", () => {
-        const passwordInput = document.getElementById("password") as HTMLInputElement;
-        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
-      });
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = emailRef.current?.value || "";
+    const password = passwordRef.current?.value || "";
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+    let valid = true;
+
+    if (!emailPattern.test(email)) {
+      setEmailError(true);
+      valid = false;
+    } else {
+      setEmailError(false);
     }
 
-    const form = document.getElementById("login-form") as HTMLFormElement;
-    const passwordInput = document.getElementById("password") as HTMLInputElement;
-
-    function validateForm(event: Event) {
-      event.preventDefault();
-
-      const emailInput = document.getElementById("email") as HTMLInputElement;
-      const emailError = document.getElementById("email-error");
-      const passwordError = document.getElementById("password-error");
-
-      const email = emailInput.value;
-      const password = passwordInput.value;
-
-      let valid = true;
-
-      // Validación de correo
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (emailError) {
-        if (!emailPattern.test(email)) {
-          emailError.classList.remove("hidden");
-          valid = false;
-        } else {
-          emailError.classList.add("hidden");
-        }
-      }
-
-      const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-      if (passwordError) {
-        if (!passwordPattern.test(password)) {
-          passwordError.classList.remove("hidden");
-          valid = false;
-        } else {
-          passwordError.classList.add("hidden");
-        }
-      }
-
-      if (valid) {
-        form.submit(); 
-      }
+    if (!passwordPattern.test(password)) {
+      setPasswordError(true);
+      valid = false;
+    } else {
+      setPasswordError(false);
     }
 
-    // Validación al enviar
-    form.addEventListener("submit", validateForm);
+    if (!valid) return;
 
-    // Validación mientras se escribe la contraseña
-    passwordInput?.addEventListener("input", () => validateForm(new Event("input")));
+    const validEmail = "demo@demo.com";
+    const validPassword = "Demo123!";
 
-    return () => {
-      form.removeEventListener("submit", validateForm);
-      passwordInput?.removeEventListener("input", () => validateForm(new Event("input")));
-    };
-  }, []);
+    if (email !== validEmail || password !== validPassword) {
+      alert("Correo o contraseña incorrectos");
+      return;
+    }
+
+    // Guardar cookie válida por 1 hora
+    document.cookie = "auth=true; path=/; max-age=3600";
+
+    // Redirigir (puedes usar router.push también si prefieres)
+    window.location.href = "/dashboard";
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
@@ -73,38 +57,39 @@ export default function LoginPage() {
           <h1>DEMO LOGIN</h1>
         </div>
 
-        <form id="login-form" className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
-              id="email"
+              ref={emailRef}
               type="email"
               placeholder="Correo electrónico"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p id="email-error" className="hidden text-sm text-red-500">
-              Por favor, ingresa un correo electrónico válido.
-            </p>
+            {emailError && (
+              <p className="text-sm text-red-500">
+                Por favor, ingresa un correo electrónico válido.
+              </p>
+            )}
           </div>
 
           <div className="relative">
             <input
-              id="password"
+              ref={passwordRef}
               type="password"
               placeholder="Contraseña"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p id="password-error" className="hidden text-sm text-red-500 mt-1">
-              La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.
-            </p>
+            {passwordError && (
+              <p className="text-sm text-red-500 mt-1">
+                La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.
+              </p>
+            )}
           </div>
 
           <div className="flex items-center justify-between">
-            <Link
-              href="/recuperar"
-              className="text-sm text-blue-500 hover:text-blue-700"
-            >
+            <Link href="/recuperar" className="text-sm text-blue-500 hover:text-blue-700">
               ¿Olvidaste tu contraseña?
             </Link>
           </div>
@@ -119,10 +104,7 @@ export default function LoginPage() {
           </div>
 
           <div className="text-center">
-            <Link
-              href="/registro"
-              className="text-sm text-gray-600 hover:text-gray-800"
-            >
+            <Link href="/registro" className="text-sm text-gray-600 hover:text-gray-800">
               ¿No tienes cuenta? Regístrate
             </Link>
           </div>
