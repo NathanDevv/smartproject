@@ -1,10 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
-export function Navbar() {
+interface NavbarProps {
+  nombreUsuario?: string; // Hacer que esta propiedad sea opcional
+}
+
+export function Navbar({ nombreUsuario }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userName, setUserName] = useState<string>("");
+
+  useEffect(() => {
+    // Si 'nombreUsuario' se pasa como prop, usarlo. Si no, usar 'localStorage'
+    const storedName = nombreUsuario || localStorage.getItem("nombreUsuario") || "Invitado";
+    setUserName(storedName);
+  }, [nombreUsuario]); // Dependencia a 'nombreUsuario'
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -23,7 +34,7 @@ export function Navbar() {
 
       <div className="flex items-center gap-3 relative">
         <span className="text-sm font-medium">
-          Bienvenido, <b>NombreUsuario</b>
+          Bienvenido, <b>{userName}</b>
         </span>
 
         <div

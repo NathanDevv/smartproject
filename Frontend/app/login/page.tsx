@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useRef, useState } from "react";
 import Link from "next/link";
 
@@ -36,7 +35,7 @@ export default function LoginPage() {
 
     if (!valid) return;
 
-    const validEmail = "demo@demo.com";
+    const validEmail = "FooTalentMember@gmail.com";
     const validPassword = "Demo123!";
 
     if (email !== validEmail || password !== validPassword) {
@@ -44,10 +43,16 @@ export default function LoginPage() {
       return;
     }
 
+    // Extraer el nombre del usuario del correo electrónico (antes del '@')
+    const username = email.split('@')[0];
+
     // Guardar cookie válida por 1 hora
     document.cookie = "auth=true; path=/; max-age=3600";
 
-    // Redirigir (puedes usar router.push también si prefieres)
+    // Guardar nombre en localStorage
+    localStorage.setItem("nombreUsuario", username);
+
+    // Redirigir al dashboard
     window.location.href = "/dashboard";
   };
 
@@ -55,9 +60,8 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="w-full max-w-sm p-8 bg-white rounded-lg shadow-md">
         <div className="flex justify-center mb-6">
-          <h1>DEMO LOGIN</h1>
+          <h1>LOG IN</h1>
         </div>
-
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -68,7 +72,6 @@ export default function LoginPage() {
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-
             {emailError && (
               <p className="text-sm text-red-500">
                 Por favor, ingresa un correo electrónico válido.
@@ -78,14 +81,12 @@ export default function LoginPage() {
 
           <div className="relative">
             <input
-
               ref={passwordRef}
               type="password"
               placeholder="Contraseña"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-
             {passwordError && (
               <p className="text-sm text-red-500 mt-1">
                 La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.
