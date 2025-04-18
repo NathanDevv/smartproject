@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useRef, useState } from "react";
 import Link from "next/link";
 
@@ -57,6 +58,7 @@ export default function LoginPage() {
           <h1>DEMO LOGIN</h1>
         </div>
 
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
@@ -66,6 +68,7 @@ export default function LoginPage() {
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+
             {emailError && (
               <p className="text-sm text-red-500">
                 Por favor, ingresa un correo electrónico válido.
@@ -75,12 +78,14 @@ export default function LoginPage() {
 
           <div className="relative">
             <input
+
               ref={passwordRef}
               type="password"
               placeholder="Contraseña"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+
             {passwordError && (
               <p className="text-sm text-red-500 mt-1">
                 La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial.
