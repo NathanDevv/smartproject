@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Loader from "@/components/Loader/Loader";
-import Navbar from "@/components/Navbar/Navbar";
+import { Loader, Navbar } from "@/components";
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
