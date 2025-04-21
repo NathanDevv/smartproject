@@ -1,24 +1,5 @@
-// app/api/users/route.ts
-
-// import { NextResponse } from "next/server";
-
-// export async function GET() {
-//   try {
-//     const res = await fetch("https://jsonplaceholder.typicode.com/users");
-//     const data = await res.json();
-//     return NextResponse.json(data);
-//   } catch (error) {
-//     return NextResponse.json(
-//       { error: "Failed to fetch users" },
-//       { status: 500 }
-//     );
-//   }
-// }
-
-// app/api/users/route.ts
 import { NextResponse } from 'next/server'
-
-const users: any[] = []  // Simula la base de datos en memoria
+import { users } from "@/lib/data"
 
 // GET: listar usuarios
 export async function GET() {
