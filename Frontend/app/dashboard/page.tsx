@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader, Navbar } from "@/components";
+import { Loader, Navbar, Table } from "@/components";
 import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
@@ -39,7 +39,8 @@ export default function DashboardPage() {
       ) : (
         <div className="bg-white p-8 rounded-lg shadow-md w-full h-screen">
           <Navbar nombreUsuario={nombreUsuario} />
-          <h1 className="text-3xl font-bold text-center m-6">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-center m-6">Bienvenido al Dashboard</h1>
+          <Table />
         </div>
       )}
     </div>
