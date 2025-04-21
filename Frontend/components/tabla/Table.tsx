@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { User } from './types';
+import { useEffect, useState } from "react";
+import { User } from "./types";
 
 export default function Table() {
   const [users, setUsers] = useState<User[]>([]);
@@ -12,7 +12,7 @@ export default function Table() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch('/api/users');
+        const res = await fetch("/api/users");
         const data = await res.json();
         setUsers(data);
       } catch (err) {
@@ -24,16 +24,14 @@ export default function Table() {
   }, []);
 
   // 🔍 Filtrar por nombre, email y ciudad
-  const filteredUsers = users.filter(user => {
-    const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
+  const filteredUsers = users.filter((user) => {
+    const name = user.name.toLowerCase();
     const email = user.email.toLowerCase();
     const city = user.address.city.toLowerCase();
     const search = searchTerm.toLowerCase();
 
     return (
-      fullName.includes(search) ||
-      email.includes(search) ||
-      city.includes(search)
+      name.includes(search) || email.includes(search) || city.includes(search)
     );
   });
 
@@ -45,7 +43,9 @@ export default function Table() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl text-center font-bold mb-10">Tabla de usuarios</h1>
+      <h1 className="text-2xl text-center font-bold mb-10">
+        Tabla de usuarios
+      </h1>
 
       {/* 🔍 Input de búsqueda */}
       <h1 className="text-2xl font-bold mb-2">Búsqueda</h1>
@@ -74,7 +74,8 @@ export default function Table() {
           {currentUsers.length > 0 ? (
             currentUsers.map((user) => (
               <tr key={user.id} className="hover:bg-gray-50">
-                <td className="p-3 border">{user.firstname} {user.lastname}</td>
+                <td className="p-3 border">{user.name}</td>
+
                 <td className="p-3 border">{user.email}</td>
                 <td className="p-3 border">{user.address.city}</td>
                 <td className="p-3 border">{user.company.name}</td>
@@ -99,8 +100,8 @@ export default function Table() {
               onClick={() => setCurrentPage(i + 1)}
               className={`px-3 py-1 border rounded ${
                 currentPage === i + 1
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-black'
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-black"
               }`}
             >
               {i + 1}
