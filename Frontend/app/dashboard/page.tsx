@@ -39,7 +39,7 @@ export default function DashboardPage() {
       ) : (
         <div className="bg-white p-8 rounded-lg shadow-md w-full h-screen">
           <Navbar nombreUsuario={nombreUsuario} />
-          <h1 className="text-3xl font-bold text-center m-6">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-center m-6">Bienvenido al Dashboard</h1>
         </div>
       )}
     </div>
