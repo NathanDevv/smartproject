@@ -1,17 +1,17 @@
-import { NextResponse } from 'next/server'
-import { users } from "@/lib/data"
+import { NextResponse, NextRequest } from "next/server";
+import { users } from "@/lib/data";
 
-// GET: listar usuarios
+// Obtener todos los usuarios
 export async function GET() {
-  return NextResponse.json(users)
+  return NextResponse.json(users);
 }
 
-// POST: crear nuevo usuario
-export async function POST(req: Request) {
-  const newUser = await req.json()
+// Crear un nuevo usuario
+export async function POST(req: NextRequest) {
+  const newUser = await req.json();
 
-  newUser.id = Date.now() // Genera un id único
-  users.push(newUser)
+  newUser.id = Date.now(); // Genera un ID único
+  users.push(newUser);
 
-  return NextResponse.json(newUser, { status: 201 })
+  return NextResponse.json(newUser, { status: 201 });
 }

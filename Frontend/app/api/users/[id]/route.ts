@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { users } from "@/lib/data";
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+// Obtener un solo usuario por ID
+export async function GET(request: NextRequest) {
+  const pathParts = request.nextUrl.pathname.split("/");
+  const id = pathParts[pathParts.length - 1]; // Obtener el último segmento de la URL (ID)
+
+  if (!id || isNaN(Number(id))) {
+    return NextResponse.json({ message: "ID inválido" }, { status: 400 });
+  }
+
   const user = users.find((u) => u.id === parseInt(id));
 
   if (!user) {
@@ -12,8 +19,15 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   return NextResponse.json(user);
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+// Actualizar un usuario por ID
+export async function PUT(request: NextRequest) {
+  const pathParts = request.nextUrl.pathname.split("/");
+  const id = pathParts[pathParts.length - 1]; // Obtener el último segmento de la URL (ID)
+
+  if (!id || isNaN(Number(id))) {
+    return NextResponse.json({ message: "ID inválido" }, { status: 400 });
+  }
+
   const index = users.findIndex((u) => u.id === parseInt(id));
 
   if (index === -1) {
@@ -26,8 +40,15 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   return NextResponse.json(users[index]);
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+// Eliminar un usuario por ID
+export async function DELETE(request: NextRequest) {
+  const pathParts = request.nextUrl.pathname.split("/");
+  const id = pathParts[pathParts.length - 1]; // Obtener el último segmento de la URL (ID)
+
+  if (!id || isNaN(Number(id))) {
+    return NextResponse.json({ message: "ID inválido" }, { status: 400 });
+  }
+
   const index = users.findIndex((u) => u.id === parseInt(id));
 
   if (index === -1) {
