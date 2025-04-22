@@ -1,4 +1,3 @@
-// lib/data.ts
-export const users: any[] = [];
+import { User } from "./types";
 
-  
+export const users: User[] = [];
