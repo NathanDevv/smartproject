@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { User } from "./types";
+import { useRouter } from "next/navigation";
 
 export default function Table() {
   const [users, setUsers] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
   const usersPerPage = 4;
 
   useEffect(() => {
@@ -35,6 +37,25 @@ export default function Table() {
     );
   });
 
+  //Lógica de eliminación
+  const handleDelete = async (id: number) => {
+    if (!confirm("¿Estás seguro de que deseas eliminar este usuario?")) return;
+  
+    try {
+      const res = await fetch(`/api/users/${id}`, {
+        method: "DELETE",
+      });
+  
+      if (res.ok) {
+        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+      } else {
+        console.error("Error al eliminar el usuario.");
+      }
+    } catch (error) {
+      console.error("Error al hacer la petición DELETE:", error);
+    }
+  };  
+
   // 📄 Lógica de paginación
   const indexOfLast = currentPage * usersPerPage;
   const indexOfFirst = indexOfLast - usersPerPage;
@@ -48,17 +69,29 @@ export default function Table() {
       </h1>
 
       {/* 🔍 Input de búsqueda */}
-      <h1 className="text-2xl font-bold mb-2">Búsqueda</h1>
-      <input
-        type="text"
-        placeholder="Buscar por nombre, email o ciudad..."
-        value={searchTerm}
-        onChange={(e) => {
-          setSearchTerm(e.target.value);
-          setCurrentPage(1); // Resetear a la página 1 al buscar
-        }}
-        className="mb-4 px-4 py-2 border rounded w-full md:w-1/2"
-      />
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold mb-2">Búsqueda</h1>
+
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <input
+            type="text"
+            placeholder="Buscar por nombre, email o ciudad..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // Resetear a la página 1 al buscar
+            }}
+            className="mb-4 px-4 py-2 border rounded w-full md:w-1/2"
+          />
+
+          <button 
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            onClick={() => {router.push("/new")}}
+          >
+            Nuevo Usuario
+          </button>
+        </div>
+      </div>
 
       {/* 📊 Tabla */}
       <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden">
@@ -68,6 +101,7 @@ export default function Table() {
             <th className="p-3 border">Email</th>
             <th className="p-3 border">Ciudad</th>
             <th className="p-3 border">Compañía</th>
+            <th className="p-3 border">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -75,10 +109,26 @@ export default function Table() {
             currentUsers.map((user) => (
               <tr key={user.id} className="hover:bg-gray-50">
                 <td className="p-3 border">{user.name}</td>
-
                 <td className="p-3 border">{user.email}</td>
                 <td className="p-3 border">{user.address.city}</td>
                 <td className="p-3 border">{user.company.name}</td>
+
+                <td className="p-3 border">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => router.push(`/edit/${user.id}`)}
+                      className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      onClick={() => handleDelete(user.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))
           ) : (
